@@ -129,6 +129,7 @@ const Promptbar = () => {
         side={'right'}
         isOpen={showPromptbar}
         addItemButtonTitle={t('New prompt')}
+        switchInterfaceTitle={t('Swicth AI')}
         itemComponent={
           <Prompts
             prompts={filteredPrompts.filter((prompt) => !prompt.folderId)}

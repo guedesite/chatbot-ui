@@ -12,6 +12,7 @@ import Search from '../Search';
 interface Props<T> {
   isOpen: boolean;
   addItemButtonTitle: string;
+  switchInterfaceTitle: string;
   side: 'left' | 'right';
   items: T[];
   itemComponent: ReactNode;
@@ -22,12 +23,14 @@ interface Props<T> {
   toggleOpen: () => void;
   handleCreateItem: () => void;
   handleCreateFolder: () => void;
+  handleSwitchAI: () => void;
   handleDrop: (e: any) => void;
 }
 
 const Sidebar = <T,>({
   isOpen,
   addItemButtonTitle,
+  switchInterfaceTitle,
   side,
   items,
   itemComponent,
@@ -38,6 +41,7 @@ const Sidebar = <T,>({
   toggleOpen,
   handleCreateItem,
   handleCreateFolder,
+  handleSwitchAI,
   handleDrop,
 }: Props<T>) => {
   const { t } = useTranslation('promptbar');
@@ -53,12 +57,24 @@ const Sidebar = <T,>({
   const removeHighlight = (e: any) => {
     e.target.style.background = 'none';
   };
-
   return isOpen ? (
     <div>
       <div
         className={`fixed top-0 ${side}-0 z-40 flex h-full w-[260px] flex-none flex-col space-y-2 bg-[#202123] p-2 text-[14px] transition-all sm:relative sm:top-0`}
       >
+        { side === 'left' && (
+          <div className="flex items-center">
+            <button
+              className="text-sidebar w-full flex-1 cursor-pointer select-none items-center gap-3 rounded-md border border-white/20 p-3 text-white transition-colors duration-200 hover:bg-gray-500/10"
+              onClick={() => {
+                
+                handleSwitchAI();
+              }}
+            >
+              {switchInterfaceTitle}
+            </button>
+          </div>
+        )}
         <div className="flex items-center">
           <button
             className="text-sidebar flex w-[190px] flex-shrink-0 cursor-pointer select-none items-center gap-3 rounded-md border border-white/20 p-3 text-white transition-colors duration-200 hover:bg-gray-500/10"

@@ -186,6 +186,16 @@ export const Chatbar = () => {
     }
   };
 
+  const handleSwitchAI = () => {
+    //let right = document.getElementsByClassName("switch-0")[0];
+    let left = document.getElementsByClassName("switch-1")[0];
+    if(left.classList.contains("active")) {
+      left.classList.remove("active");
+    } else {
+      left.classList.add("active");
+    }
+  }
+
   useEffect(() => {
     if (searchTerm) {
       chatDispatch({
@@ -223,6 +233,7 @@ export const Chatbar = () => {
         side={'left'}
         isOpen={showChatbar}
         addItemButtonTitle={t('New chat')}
+        switchInterfaceTitle={t('Swicth AI')}
         itemComponent={<Conversations conversations={filteredConversations} />}
         folderComponent={<ChatFolders searchTerm={searchTerm} />}
         items={filteredConversations}
@@ -231,6 +242,8 @@ export const Chatbar = () => {
           chatDispatch({ field: 'searchTerm', value: searchTerm })
         }
         toggleOpen={handleToggleChatbar}
+        
+        handleSwitchAI={handleSwitchAI}
         handleCreateItem={handleNewConversation}
         handleCreateFolder={() => handleCreateFolder(t('New folder'), 'chat')}
         handleDrop={handleDrop}
