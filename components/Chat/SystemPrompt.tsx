@@ -17,16 +17,20 @@ import { Prompt } from '@/types/prompt';
 import { PromptList } from './PromptList';
 import { VariableModal } from './VariableModal';
 
+import { AI } from '@/types/AI';
+
 interface Props {
   conversation: Conversation;
   prompts: Prompt[];
   onChangePrompt: (prompt: string) => void;
+  AI: AI;
 }
 
 export const SystemPrompt: FC<Props> = ({
   conversation,
   prompts,
   onChangePrompt,
+  AI,
 }) => {
   const { t } = useTranslation('chat');
 
@@ -46,7 +50,7 @@ export const SystemPrompt: FC<Props> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    const maxLength = conversation.model.maxLength;
+    const maxLength = AI.maxLength;
 
     if (value.length > maxLength) {
       alert(

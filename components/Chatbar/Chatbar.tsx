@@ -11,7 +11,6 @@ import { exportData, importData } from '@/utils/app/importExport';
 
 import { Conversation } from '@/types/chat';
 import { LatestExportFormat, SupportedExportFormats } from '@/types/export';
-import { OpenAIModels } from '@/types/openai';
 import { PluginKey } from '@/types/plugin';
 
 import HomeContext from '@/pages/api/home/home.context';
@@ -45,7 +44,7 @@ export const Chatbar: FC<Props> = ({
   });
 
   const {
-    state: { conversations, showChatbar, defaultModelId, folders, pluginKeys },
+    state: { conversations, showChatbar, folders, pluginKeys },
     dispatch: homeDispatch,
     handleCreateFolder,
     handleNewConversation,
@@ -123,14 +122,12 @@ export const Chatbar: FC<Props> = ({
   };
 
   const handleClearConversations = (AI:AI) => {
-    defaultModelId &&
-      homeDispatch({
+    homeDispatch({
         field: 'selectedConversation',
         value: {
           id: uuidv4(),
           name: t('New Conversation'),
           messages: [],
-          model: OpenAIModels[defaultModelId],
           prompt: DEFAULT_SYSTEM_PROMPT,
           temperature: DEFAULT_TEMPERATURE,
           folderId: null,
@@ -165,14 +162,12 @@ export const Chatbar: FC<Props> = ({
 
       saveConversation(AI, updatedConversations[updatedConversations.length - 1]);
     } else {
-      defaultModelId &&
-        homeDispatch({
+      homeDispatch({
           field: 'selectedConversation',
           value: {
             id: uuidv4(),
             name: t('New Conversation'),
             messages: [],
-            model: OpenAIModels[defaultModelId],
             prompt: DEFAULT_SYSTEM_PROMPT,
             temperature: DEFAULT_TEMPERATURE,
             folderId: null,

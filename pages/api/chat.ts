@@ -1,5 +1,4 @@
 import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
-import { OpenAIError, OpenAIStream } from '@/utils/server';
 
 import { ChatBody, Message } from '@/types/chat';
 
@@ -14,8 +13,8 @@ export const config = {
 };
 
 const handler = async (req: Request): Promise<Response> => {
-  try {
-    const { model, messages, key, prompt, temperature } = (await req.json()) as ChatBody;
+ /* try {
+    const {  messages, prompt, temperature } = (await req.json()) as ChatBody;
 
     await init((imports) => WebAssembly.instantiate(wasm, imports));
     const encoding = new Tiktoken(
@@ -43,7 +42,7 @@ const handler = async (req: Request): Promise<Response> => {
       const message = messages[i];
       const tokens = encoding.encode(message.content);
 
-      if (tokenCount + tokens.length + 1000 > model.tokenLimit) {
+      if (tokenCount + tokens.length + 1000 > AI.tokenLimit) {
         break;
       }
       tokenCount += tokens.length;
@@ -62,7 +61,8 @@ const handler = async (req: Request): Promise<Response> => {
     } else {
       return new Response('Error', { status: 500 });
     }
-  }
+  }*/
+  return new Response('error');
 };
 
 export default handler;

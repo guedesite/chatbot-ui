@@ -1,6 +1,4 @@
 import { Conversation } from '@/types/chat';
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
-
 import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from './const';
 
 export const cleanSelectedConversation = (conversation: Conversation) => {
@@ -13,12 +11,6 @@ export const cleanSelectedConversation = (conversation: Conversation) => {
   let updatedConversation = conversation;
 
   // check for model on each conversation
-  if (!updatedConversation.model) {
-    updatedConversation = {
-      ...updatedConversation,
-      model: updatedConversation.model || OpenAIModels[OpenAIModelID.GPT_3_5],
-    };
-  }
 
   // check for system prompt on each conversation
   if (!updatedConversation.prompt) {
@@ -66,9 +58,6 @@ export const cleanConversationHistory = (history: any[]): Conversation[] => {
 
   return history.reduce((acc: any[], conversation) => {
     try {
-      if (!conversation.model) {
-        conversation.model = OpenAIModels[OpenAIModelID.GPT_3_5];
-      }
 
       if (!conversation.prompt) {
         conversation.prompt = DEFAULT_SYSTEM_PROMPT;

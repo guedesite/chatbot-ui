@@ -1,10 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
 
-import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 
@@ -28,7 +24,6 @@ import { getSettings } from '@/utils/app/settings';
 import { Conversation } from '@/types/chat';
 import { KeyValuePair } from '@/types/data';
 import { FolderInterface, FolderType } from '@/types/folder';
-import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 import { Prompt } from '@/types/prompt';
 
 import { Chat } from '@/components/Chat/Chat';
@@ -44,10 +39,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { AI } from '@/types/AI';
 interface Props {
   AI: AI;
+  index: number;
 }
 
 export const AIMain: FC<Props> = ({
-  AI: AI
+  AI,
+  index
 }) => {
     const { t } = useTranslation('chat');
   const { getModels } = useApiService();
@@ -358,20 +355,12 @@ export const AIMain: FC<Props> = ({
       handleUpdateConversation,
     }}
   >
-    <Head>
-      <title>Chatbot UI</title>
-      <meta name="description" content="ChatGPT but better." />
-      <meta
-        name="viewport"
-        content="height=device-height ,width=device-width, initial-scale=1, user-scalable=no"
-      />
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+   
     {selectedConversation && (
       <main
         className={`text-sm w-full text-white dark:text-white ${lightMode}`}
       >
-        <div className={`flex h-screen flex-col switch-ai switch-0`}>
+        <div className={`flex h-screen flex-col switch-ai switch-${index}`}>
           <div className="fixed top-0 w-full sm:hidden">
             <Navbar
               AI={AI}
