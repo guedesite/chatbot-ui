@@ -28,6 +28,8 @@ import { PluginSelect } from './PluginSelect';
 import { PromptList } from './PromptList';
 import { VariableModal } from './VariableModal';
 
+import { AI } from '@/types/AI';
+
 interface Props {
   onSend: (message: Message, plugin: Plugin | null) => void;
   onRegenerate: () => void;
@@ -35,6 +37,7 @@ interface Props {
   stopConversationRef: MutableRefObject<boolean>;
   textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
   showScrollDownButton: boolean;
+  AI:AI;
 }
 
 export const ChatInput = ({
@@ -44,6 +47,7 @@ export const ChatInput = ({
   stopConversationRef,
   textareaRef,
   showScrollDownButton,
+  AI,
 }: Props) => {
   const { t } = useTranslation('chat');
 
@@ -71,7 +75,7 @@ export const ChatInput = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    const maxLength = selectedConversation?.model.maxLength;
+    const maxLength = AI.maxLength;
 
     if (maxLength && value.length > maxLength) {
       alert(

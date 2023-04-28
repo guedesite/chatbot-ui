@@ -14,7 +14,17 @@ import ChatbarContext from '../Chatbar.context';
 import { ClearConversations } from './ClearConversations';
 import { PluginKeys } from './PluginKeys';
 
-export const ChatbarSettings = () => {
+
+import { FC } from 'react';
+import { AI } from '@/types/AI';
+
+interface Props {
+  AI: AI;
+}
+
+export const ChatbarSettings: FC<Props> = ({
+  AI
+}) => {
   const { t } = useTranslation('sidebar');
   const [isSettingDialogOpen, setIsSettingDialog] = useState<boolean>(false);
 
@@ -39,15 +49,15 @@ export const ChatbarSettings = () => {
   return (
     <div className="flex flex-col items-center space-y-1 border-t border-white/20 pt-1 text-sm">
       {conversations.length > 0 ? (
-        <ClearConversations onClearConversations={handleClearConversations} />
+        <ClearConversations AI={AI} onClearConversations={() => handleClearConversations(AI)} />
       ) : null}
 
-      <Import onImport={handleImportConversations} />
+      <Import AI={AI} onImport={handleImportConversations} />
 
       <SidebarButton
         text={t('Export data')}
         icon={<IconFileExport size={18} />}
-        onClick={() => handleExportData()}
+        onClick={() => handleExportData(AI)}
       />
 
       <SidebarButton
@@ -57,12 +67,13 @@ export const ChatbarSettings = () => {
       />
 
       {!serverSideApiKeyIsSet ? (
-        <Key apiKey={apiKey} onApiKeyChange={handleApiKeyChange} />
+        <Key AI={AI} apiKey={apiKey} onApiKeyChange={handleApiKeyChange} />
       ) : null}
 
-      {!serverSidePluginKeysSet ? <PluginKeys /> : null}
+      {!serverSidePluginKeysSet ? <PluginKeys AI={AI} /> : null}
 
       <SettingDialog
+        AI={AI}
         open={isSettingDialogOpen}
         onClose={() => {
           setIsSettingDialog(false);

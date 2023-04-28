@@ -10,7 +10,17 @@ import { SidebarButton } from '@/components/Sidebar/SidebarButton';
 
 import ChatbarContext from '../Chatbar.context';
 
-export const PluginKeys = () => {
+
+import { AI } from '@/types/AI';
+import { FC } from 'react';
+
+
+
+interface Props {
+  AI:AI;
+}
+
+export const PluginKeys: FC<Props> = ({ AI }) => {
   const { t } = useTranslation('sidebar');
 
   const {
@@ -121,7 +131,7 @@ export const PluginKeys = () => {
                             }),
                           };
 
-                          handlePluginKeyChange(updatedPluginKey);
+                          handlePluginKeyChange(AI, updatedPluginKey);
                         }
                       } else {
                         const newPluginKey: PluginKey = {
@@ -138,7 +148,7 @@ export const PluginKeys = () => {
                           ],
                         };
 
-                        handlePluginKeyChange(newPluginKey);
+                        handlePluginKeyChange(AI,newPluginKey);
                       }
                     }}
                   />
@@ -180,7 +190,7 @@ export const PluginKeys = () => {
                             }),
                           };
 
-                          handlePluginKeyChange(updatedPluginKey);
+                          handlePluginKeyChange(AI,updatedPluginKey);
                         }
                       } else {
                         const newPluginKey: PluginKey = {
@@ -197,7 +207,7 @@ export const PluginKeys = () => {
                           ],
                         };
 
-                        handlePluginKeyChange(newPluginKey);
+                        handlePluginKeyChange(AI, newPluginKey);
                       }
                     }}
                   />
@@ -210,7 +220,7 @@ export const PluginKeys = () => {
                       );
 
                       if (pluginKey) {
-                        handleClearPluginKey(pluginKey);
+                        handleClearPluginKey(AI, pluginKey);
                       }
                     }}
                   >

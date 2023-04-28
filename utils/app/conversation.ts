@@ -1,6 +1,9 @@
 import { Conversation } from '@/types/chat';
 
+import { AI } from '@/types/AI';
+
 export const updateConversation = (
+  AI:AI,
   updatedConversation: Conversation,
   allConversations: Conversation[],
 ) => {
@@ -12,8 +15,8 @@ export const updateConversation = (
     return c;
   });
 
-  saveConversation(updatedConversation);
-  saveConversations(updatedConversations);
+  saveConversation(AI,updatedConversation);
+  saveConversations(AI,updatedConversations);
 
   return {
     single: updatedConversation,
@@ -21,10 +24,10 @@ export const updateConversation = (
   };
 };
 
-export const saveConversation = (conversation: Conversation) => {
-  localStorage.setItem('selectedConversation', JSON.stringify(conversation));
+export const saveConversation = (AI:AI,conversation: Conversation) => {
+  localStorage.setItem(AI.name+'_selectedConversation', JSON.stringify(conversation));
 };
 
-export const saveConversations = (conversations: Conversation[]) => {
-  localStorage.setItem('conversationHistory', JSON.stringify(conversations));
+export const saveConversations = (AI:AI,conversations: Conversation[]) => {
+  localStorage.setItem(AI.name+'_conversationHistory', JSON.stringify(conversations));
 };

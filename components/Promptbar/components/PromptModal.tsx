@@ -3,14 +3,15 @@ import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Prompt } from '@/types/prompt';
-
+import {AI} from '@/types/AI';
 interface Props {
   prompt: Prompt;
   onClose: () => void;
-  onUpdatePrompt: (prompt: Prompt) => void;
+  onUpdatePrompt: (AI:AI, prompt: Prompt) => void;
+  AI:AI;
 }
 
-export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
+export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt,AI }) => {
   const { t } = useTranslation('promptbar');
   const [name, setName] = useState(prompt.name);
   const [description, setDescription] = useState(prompt.description);
@@ -21,7 +22,7 @@ export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
 
   const handleEnter = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      onUpdatePrompt({ ...prompt, name, description, content: content.trim() });
+      onUpdatePrompt(AI,{ ...prompt, name, description, content: content.trim() });
       onClose();
     }
   };
@@ -116,7 +117,7 @@ export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
                   content: content.trim(),
                 };
 
-                onUpdatePrompt(updatedPrompt);
+                onUpdatePrompt(AI, updatedPrompt);
                 onClose();
               }}
             >

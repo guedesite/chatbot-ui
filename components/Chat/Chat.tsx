@@ -34,11 +34,14 @@ import { SystemPrompt } from './SystemPrompt';
 import { TemperatureSlider } from './Temperature';
 import { MemoizedChatMessage } from './MemoizedChatMessage';
 
+import { AI } from '@/types/AI';
+
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
+  AI:AI;
 }
 
-export const Chat = memo(({ stopConversationRef }: Props) => {
+export const Chat = memo(({ stopConversationRef,AI }: Props) => {
   const { t } = useTranslation('chat');
 
   const {
@@ -94,9 +97,9 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
         homeDispatch({ field: 'loading', value: true });
         homeDispatch({ field: 'messageIsStreaming', value: true });
         const chatBody: ChatBody = {
-          model: updatedConversation.model,
+          //model: updatedConversation.model,
           messages: updatedConversation.messages,
-          key: apiKey,
+          //key: apiKey,
           prompt: updatedConversation.prompt,
           temperature: updatedConversation.temperature,
         };
@@ -197,7 +200,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               });
             }
           }
-          saveConversation(updatedConversation);
+          saveConversation(AI,updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
               if (conversation.id === selectedConversation.id) {
@@ -210,7 +213,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             updatedConversations.push(updatedConversation);
           }
           homeDispatch({ field: 'conversations', value: updatedConversations });
-          saveConversations(updatedConversations);
+          saveConversations(AI,updatedConversations);
           homeDispatch({ field: 'messageIsStreaming', value: false });
         } else {
           const { answer } = await response.json();
@@ -226,7 +229,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             field: 'selectedConversation',
             value: updateConversation,
           });
-          saveConversation(updatedConversation);
+          saveConversation(AI, updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
               if (conversation.id === selectedConversation.id) {
@@ -239,7 +242,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             updatedConversations.push(updatedConversation);
           }
           homeDispatch({ field: 'conversations', value: updatedConversations });
-          saveConversations(updatedConversations);
+          saveConversations(AI, updatedConversations);
           homeDispatch({ field: 'loading', value: false });
           homeDispatch({ field: 'messageIsStreaming', value: false });
         }
@@ -293,7 +296,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
       confirm(t<string>('Are you sure you want to clear all messages?')) &&
       selectedConversation
     ) {
-      handleUpdateConversation(selectedConversation, {
+      handleUpdateConversation(AI, selectedConversation, {
         key: 'messages',
         value: [],
       });
@@ -411,13 +414,13 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
 
                   {models.length > 0 && (
                     <div className="flex h-full flex-col space-y-4 rounded-lg border border-neutral-200 p-4 dark:border-neutral-600">
-                      <ModelSelect />
+                      <ModelSelect AI={AI} />
 
                       <SystemPrompt
                         conversation={selectedConversation}
                         prompts={prompts}
                         onChangePrompt={(prompt) =>
-                          handleUpdateConversation(selectedConversation, {
+                          handleUpdateConversation(AI,selectedConversation, {
                             key: 'prompt',
                             value: prompt,
                           })
@@ -427,7 +430,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                       <TemperatureSlider
                         label={t('Temperature')}
                         onChangeTemperature={(temperature) =>
-                          handleUpdateConversation(selectedConversation, {
+                          handleUpdateConversation(AI,selectedConversation, {
                             key: 'temperature',
                             value: temperature,
                           })
@@ -440,7 +443,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             ) : (
               <>
                 <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
-                  {t('Model')}: {selectedConversation?.model.name} | {t('Temp')}
+                  {t('Model')}: {AI.name}
                   : {selectedConversation?.temperature} |
                   <button
                     className="ml-2 cursor-pointer hover:opacity-50"
@@ -458,13 +461,14 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                 {showSettings && (
                   <div className="flex flex-col space-y-10 md:mx-auto md:max-w-xl md:gap-6 md:py-3 md:pt-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
                     <div className="flex h-full flex-col space-y-4 border-b border-neutral-200 p-4 dark:border-neutral-600 md:rounded-lg md:border">
-                      <ModelSelect />
+                      <ModelSelect AI={AI}/>
                     </div>
                   </div>
                 )}
 
                 {selectedConversation?.messages.map((message, index) => (
                   <MemoizedChatMessage
+                    AI={AI}
                     key={index}
                     message={message}
                     messageIndex={index}
@@ -503,6 +507,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               }
             }}
             showScrollDownButton={showScrollDownButton}
+            AI={AI}
           />
         </>
       )}

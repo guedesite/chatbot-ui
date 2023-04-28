@@ -2,11 +2,14 @@ import { Conversation } from '@/types/chat';
 
 import { ConversationComponent } from './Conversation';
 
+import { AI } from '@/types/AI';
+
 interface Props {
   conversations: Conversation[];
+  AI:AI;
 }
 
-export const Conversations = ({ conversations }: Props) => {
+export const Conversations = ({ conversations, AI }: Props) => {
   return (
     <div className="flex w-full flex-col gap-1">
       {conversations
@@ -14,7 +17,7 @@ export const Conversations = ({ conversations }: Props) => {
         .slice()
         .reverse()
         .map((conversation, index) => (
-          <ConversationComponent key={index} conversation={conversation} />
+          <ConversationComponent AI={AI} key={index} conversation={conversation} />
         ))}
     </div>
   );

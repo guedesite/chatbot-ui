@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, FC } from 'react';
 
 import { FolderInterface } from '@/types/folder';
 
@@ -9,7 +9,13 @@ import { PromptComponent } from '@/components/Promptbar/components/Prompt';
 
 import PromptbarContext from '../PromptBar.context';
 
-export const PromptFolders = () => {
+import { AI } from '@/types/AI';
+
+interface Props {
+  AI:AI
+}
+
+export const PromptFolders: FC<Props> = ({AI }) => {
   const {
     state: { folders },
   } = useContext(HomeContext);
@@ -19,7 +25,7 @@ export const PromptFolders = () => {
     handleUpdatePrompt,
   } = useContext(PromptbarContext);
 
-  const handleDrop = (e: any, folder: FolderInterface) => {
+  const handleDrop = (AI:AI, e: any, folder: FolderInterface) => {
     if (e.dataTransfer) {
       const prompt = JSON.parse(e.dataTransfer.getData('prompt'));
 
@@ -28,7 +34,7 @@ export const PromptFolders = () => {
         folderId: folder.id,
       };
 
-      handleUpdatePrompt(updatedPrompt);
+      handleUpdatePrompt(AI, updatedPrompt);
     }
   };
 
@@ -39,7 +45,7 @@ export const PromptFolders = () => {
         if (prompt.folderId === currentFolder.id) {
           return (
             <div key={index} className="ml-5 gap-2 border-l pl-2">
-              <PromptComponent prompt={prompt} />
+              <PromptComponent AI={AI} prompt={prompt} />
             </div>
           );
         }
@@ -52,6 +58,7 @@ export const PromptFolders = () => {
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((folder, index) => (
           <Folder
+            AI={AI}
             key={index}
             searchTerm={searchTerm}
             currentFolder={folder}

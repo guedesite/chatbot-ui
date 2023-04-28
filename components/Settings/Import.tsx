@@ -7,11 +7,14 @@ import { SupportedExportFormats } from '@/types/export';
 
 import { SidebarButton } from '../Sidebar/SidebarButton';
 
+import { AI } from '@/types/AI';
+
 interface Props {
-  onImport: (data: SupportedExportFormats) => void;
+  onImport: (AI:AI, data: SupportedExportFormats) => void;
+  AI:AI;
 }
 
-export const Import: FC<Props> = ({ onImport }) => {
+export const Import: FC<Props> = ({ onImport,AI }) => {
   const { t } = useTranslation('sidebar');
   return (
     <>
@@ -28,7 +31,7 @@ export const Import: FC<Props> = ({ onImport }) => {
           const reader = new FileReader();
           reader.onload = (e) => {
             let json = JSON.parse(e.target?.result as string);
-            onImport(json);
+            onImport(AI,json);
           };
           reader.readAsText(file);
         }}

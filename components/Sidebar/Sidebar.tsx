@@ -2,6 +2,10 @@ import { IconFolderPlus, IconMistOff, IconPlus } from '@tabler/icons-react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+
+
+import { AI } from '@/types/AI';
+
 import {
   CloseSidebarButton,
   OpenSidebarButton,
@@ -19,12 +23,13 @@ interface Props<T> {
   folderComponent: ReactNode;
   footerComponent?: ReactNode;
   searchTerm: string;
-  handleSearchTerm: (searchTerm: string) => void;
-  toggleOpen: () => void;
-  handleCreateItem: () => void;
-  handleCreateFolder: () => void;
-  handleSwitchAI: () => void;
-  handleDrop: (e: any) => void;
+  handleSearchTerm: (AI:AI, searchTerm: string) => void;
+  toggleOpen: (AI:AI) => void;
+  handleCreateItem: (AI:AI) => void;
+  handleCreateFolder: (AI:AI) => void;
+  handleSwitchAI: (AI:AI) => void;
+  handleDrop: (AI:AI, e: any) => void;
+  AI:AI;
 }
 
 const Sidebar = <T,>({
@@ -43,18 +48,19 @@ const Sidebar = <T,>({
   handleCreateFolder,
   handleSwitchAI,
   handleDrop,
+  AI,
 }: Props<T>) => {
   const { t } = useTranslation('promptbar');
 
-  const allowDrop = (e: any) => {
+  const allowDrop = (AI:AI, e: any) => {
     e.preventDefault();
   };
 
-  const highlightDrop = (e: any) => {
+  const highlightDrop = (AI:AI, e: any) => {
     e.target.style.background = '#343541';
   };
 
-  const removeHighlight = (e: any) => {
+  const removeHighlight = (AI:AI, e: any) => {
     e.target.style.background = 'none';
   };
   return isOpen ? (
@@ -68,7 +74,7 @@ const Sidebar = <T,>({
               className="text-sidebar w-full flex-1 cursor-pointer select-none items-center gap-3 rounded-md border border-white/20 p-3 text-white transition-colors duration-200 hover:bg-gray-500/10"
               onClick={() => {
                 
-                handleSwitchAI();
+                handleSwitchAI(AI);
               }}
             >
               {switchInterfaceTitle}
@@ -79,8 +85,8 @@ const Sidebar = <T,>({
           <button
             className="text-sidebar flex w-[190px] flex-shrink-0 cursor-pointer select-none items-center gap-3 rounded-md border border-white/20 p-3 text-white transition-colors duration-200 hover:bg-gray-500/10"
             onClick={() => {
-              handleCreateItem();
-              handleSearchTerm('');
+              handleCreateItem(AI);
+              handleSearchTerm(AI,'');
             }}
           >
             <IconPlus size={16} />
@@ -89,7 +95,7 @@ const Sidebar = <T,>({
 
           <button
             className="ml-2 flex flex-shrink-0 cursor-pointer items-center gap-3 rounded-md border border-white/20 p-3 text-sm text-white transition-colors duration-200 hover:bg-gray-500/10"
-            onClick={handleCreateFolder}
+            onClick={() => handleCreateFolder(AI)}
           >
             <IconFolderPlus size={16} />
           </button>
@@ -97,7 +103,8 @@ const Sidebar = <T,>({
         <Search
           placeholder={t('Search...') || ''}
           searchTerm={searchTerm}
-          onSearch={handleSearchTerm}
+          onSearch={(evt)=>handleSearchTerm(AI, evt)}
+          AI={AI}
         />
 
         <div className="flex-grow overflow-auto">
@@ -110,10 +117,10 @@ const Sidebar = <T,>({
           {items?.length > 0 ? (
             <div
               className="pt-2"
-              onDrop={handleDrop}
-              onDragOver={allowDrop}
-              onDragEnter={highlightDrop}
-              onDragLeave={removeHighlight}
+              onDrop={(evt) => handleDrop(AI, evt)}
+              onDragOver={(evt) =>allowDrop(AI, evt)}
+              onDragEnter={(evt) =>highlightDrop}
+              onDragLeave={(evt) =>removeHighlight}
             >
               {itemComponent}
             </div>

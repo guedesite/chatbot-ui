@@ -1,5 +1,5 @@
 import { IconExternalLink } from '@tabler/icons-react';
-import { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
@@ -7,7 +7,13 @@ import { OpenAIModel } from '@/types/openai';
 
 import HomeContext from '@/pages/api/home/home.context';
 
-export const ModelSelect = () => {
+import { AI } from '@/types/AI';
+
+interface Props {
+  AI:AI;
+}
+
+export const ModelSelect: FC<Props> = ({ AI }) =>{
   const { t } = useTranslation('chat');
 
   const {
@@ -18,7 +24,7 @@ export const ModelSelect = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     selectedConversation &&
-      handleUpdateConversation(selectedConversation, {
+      handleUpdateConversation(AI, selectedConversation, {
         key: 'model',
         value: models.find(
           (model) => model.id === e.target.value,

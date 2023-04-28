@@ -5,26 +5,29 @@ import { useTranslation } from 'next-i18next';
 
 import { SidebarButton } from '../Sidebar/SidebarButton';
 
+import { AI } from '@/types/AI';
+
 interface Props {
   apiKey: string;
-  onApiKeyChange: (apiKey: string) => void;
+  onApiKeyChange: (AI:AI, apiKey: string) => void;
+  AI:AI;
 }
 
-export const Key: FC<Props> = ({ apiKey, onApiKeyChange }) => {
+export const Key: FC<Props> = ({ apiKey, onApiKeyChange,AI }) => {
   const { t } = useTranslation('sidebar');
   const [isChanging, setIsChanging] = useState(false);
   const [newKey, setNewKey] = useState(apiKey);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleEnterDown = (e: KeyboardEvent<HTMLDivElement>) => {
+  const handleEnterDown = (AI:AI, e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleUpdateKey(newKey);
+      handleUpdateKey(AI,newKey);
     }
   };
 
-  const handleUpdateKey = (newKey: string) => {
-    onApiKeyChange(newKey.trim());
+  const handleUpdateKey = (AI:AI, newKey: string) => {
+    onApiKeyChange(AI,newKey.trim());
     setIsChanging(false);
   };
 
@@ -44,7 +47,7 @@ export const Key: FC<Props> = ({ apiKey, onApiKeyChange }) => {
         type="password"
         value={newKey}
         onChange={(e) => setNewKey(e.target.value)}
-        onKeyDown={handleEnterDown}
+        onKeyDown={(evt)=>handleEnterDown(AI,evt)}
         placeholder={t('API Key') || 'API Key'}
       />
 
@@ -54,7 +57,7 @@ export const Key: FC<Props> = ({ apiKey, onApiKeyChange }) => {
           size={18}
           onClick={(e) => {
             e.stopPropagation();
-            handleUpdateKey(newKey);
+            handleUpdateKey(AI, newKey);
           }}
         />
 

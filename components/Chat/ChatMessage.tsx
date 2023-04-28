@@ -23,13 +23,16 @@ import rehypeMathjax from 'rehype-mathjax';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 
+import { AI } from '@/types/AI';
+
 export interface Props {
+  AI:AI;
   message: Message;
   messageIndex: number;
   onEdit?: (editedMessage: Message) => void
 }
 
-export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) => {
+export const ChatMessage: FC<Props> = memo(({ AI, message, messageIndex, onEdit }) => {
   const { t } = useTranslation('chat');
 
   const {
@@ -87,6 +90,7 @@ export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) =
     };
 
     const { single, all } = updateConversation(
+      AI,
       updatedConversation,
       conversations,
     );

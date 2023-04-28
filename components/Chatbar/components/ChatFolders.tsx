@@ -8,11 +8,16 @@ import Folder from '@/components/Folder';
 
 import { ConversationComponent } from './Conversation';
 
+
+
+import { AI } from '@/types/AI';
+
 interface Props {
   searchTerm: string;
+  AI:AI;
 }
 
-export const ChatFolders = ({ searchTerm }: Props) => {
+export const ChatFolders = ({ searchTerm,AI }: Props) => {
   const {
     state: { folders, conversations },
     handleUpdateConversation,
@@ -21,7 +26,7 @@ export const ChatFolders = ({ searchTerm }: Props) => {
   const handleDrop = (e: any, folder: FolderInterface) => {
     if (e.dataTransfer) {
       const conversation = JSON.parse(e.dataTransfer.getData('conversation'));
-      handleUpdateConversation(conversation, {
+      handleUpdateConversation(AI,conversation, {
         key: 'folderId',
         value: folder.id,
       });
@@ -37,7 +42,7 @@ export const ChatFolders = ({ searchTerm }: Props) => {
           if (conversation.folderId === currentFolder.id) {
             return (
               <div key={index} className="ml-5 gap-2 border-l pl-2">
-                <ConversationComponent conversation={conversation} />
+                <ConversationComponent AI={AI} conversation={conversation} />
               </div>
             );
           }
@@ -51,7 +56,8 @@ export const ChatFolders = ({ searchTerm }: Props) => {
         .filter((folder) => folder.type === 'chat')
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((folder, index) => (
-          <Folder
+          <Folder 
+            AI={AI}
             key={index}
             searchTerm={searchTerm}
             currentFolder={folder}

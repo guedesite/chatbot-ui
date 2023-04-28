@@ -8,16 +8,20 @@ import { PluginKey } from '@/types/plugin';
 
 import { ChatbarInitialState } from './Chatbar.state';
 
+
+import { AI } from '@/types/AI';
+
 export interface ChatbarContextProps {
   state: ChatbarInitialState;
   dispatch: Dispatch<ActionType<ChatbarInitialState>>;
-  handleDeleteConversation: (conversation: Conversation) => void;
-  handleClearConversations: () => void;
-  handleExportData: () => void;
-  handleImportConversations: (data: SupportedExportFormats) => void;
-  handlePluginKeyChange: (pluginKey: PluginKey) => void;
-  handleClearPluginKey: (pluginKey: PluginKey) => void;
-  handleApiKeyChange: (apiKey: string) => void;
+  handleDeleteConversation: (AI:AI, conversation: Conversation) => void;
+  handleClearConversations: (AI:AI) => void;
+  handleExportData: (AI:AI) => void;
+  handleImportConversations: (AI:AI, data: SupportedExportFormats) => void;
+  handlePluginKeyChange: (AI:AI, pluginKey: PluginKey) => void;
+  handleClearPluginKey: (AI:AI, pluginKey: PluginKey) => void;
+  handleApiKeyChange: (AI:AI, apiKey: string) => void;
+  AI: AI;
 }
 
 const ChatbarContext = createContext<ChatbarContextProps>(undefined!);

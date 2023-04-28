@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateReducer } from '@/hooks/useCreateReducer';
@@ -19,8 +19,13 @@ import PromptbarContext from './PromptBar.context';
 import { PromptbarInitialState, initialState } from './Promptbar.state';
 
 import { v4 as uuidv4 } from 'uuid';
+import { AI } from '@/types/AI';
 
-const Promptbar = () => {
+interface Props{
+  AI:AI;
+}
+
+const Promptbar:FC<Props> = ({AI}) => {
   const { t } = useTranslation('promptbar');
 
   const promptBarContextValue = useCreateReducer<PromptbarInitialState>({
@@ -40,10 +45,10 @@ const Promptbar = () => {
 
   const handleTogglePromptbar = () => {
     homeDispatch({ field: 'showPromptbar', value: !showPromptbar });
-    localStorage.setItem('showPromptbar', JSON.stringify(!showPromptbar));
+    localStorage.setItem(AI.name+'_showPromptbar', JSON.stringify(!showPromptbar));
   };
 
-  const handleCreatePrompt = () => {
+  const handleCreatePrompt = (AI:AI) => {
     if (defaultModelId) {
       const newPrompt: Prompt = {
         id: uuidv4(),
@@ -58,18 +63,18 @@ const Promptbar = () => {
 
       homeDispatch({ field: 'prompts', value: updatedPrompts });
 
-      savePrompts(updatedPrompts);
+      savePrompts(AI, updatedPrompts);
     }
   };
 
-  const handleDeletePrompt = (prompt: Prompt) => {
+  const handleDeletePrompt = (AI:AI, prompt: Prompt) => {
     const updatedPrompts = prompts.filter((p) => p.id !== prompt.id);
 
     homeDispatch({ field: 'prompts', value: updatedPrompts });
-    savePrompts(updatedPrompts);
+    savePrompts(AI, updatedPrompts);
   };
 
-  const handleUpdatePrompt = (prompt: Prompt) => {
+  const handleUpdatePrompt = (AI:AI, prompt: Prompt) => {
     const updatedPrompts = prompts.map((p) => {
       if (p.id === prompt.id) {
         return prompt;
@@ -79,10 +84,10 @@ const Promptbar = () => {
     });
     homeDispatch({ field: 'prompts', value: updatedPrompts });
 
-    savePrompts(updatedPrompts);
+    savePrompts(AI, updatedPrompts);
   };
 
-  const handleDrop = (e: any) => {
+  const handleDrop = (AI:AI, e: any) => {
     if (e.dataTransfer) {
       const prompt = JSON.parse(e.dataTransfer.getData('prompt'));
 
@@ -91,7 +96,7 @@ const Promptbar = () => {
         folderId: e.target.dataset.folderId,
       };
 
-      handleUpdatePrompt(updatedPrompt);
+      handleUpdatePrompt(AI, updatedPrompt);
 
       e.target.style.background = 'none';
     }
@@ -126,24 +131,27 @@ const Promptbar = () => {
       }}
     >
       <Sidebar<Prompt>
+        AI={AI}
         side={'right'}
         isOpen={showPromptbar}
         addItemButtonTitle={t('New prompt')}
         switchInterfaceTitle={t('Swicth AI')}
         itemComponent={
           <Prompts
+            AI={AI}
             prompts={filteredPrompts.filter((prompt) => !prompt.folderId)}
           />
         }
-        folderComponent={<PromptFolders />}
+        folderComponent={<PromptFolders  AI={AI} />}
         items={filteredPrompts}
         searchTerm={searchTerm}
-        handleSearchTerm={(searchTerm: string) =>
+        handleSearchTerm={(AI, searchTerm: string) =>
           promptDispatch({ field: 'searchTerm', value: searchTerm })
         }
+        handleSwitchAI={()=> {}}
         toggleOpen={handleTogglePromptbar}
         handleCreateItem={handleCreatePrompt}
-        handleCreateFolder={() => handleCreateFolder(t('New folder'), 'prompt')}
+        handleCreateFolder={() => handleCreateFolder(AI,t('New folder'), 'prompt')}
         handleDrop={handleDrop}
       />
     </PromptbarContext.Provider>

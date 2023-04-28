@@ -10,14 +10,16 @@ import { Settings } from '@/types/settings';
 
 import HomeContext from '@/pages/api/home/home.context';
 
+import { AI } from '@/types/AI';
 interface Props {
   open: boolean;
   onClose: () => void;
+  AI:AI;
 }
 
-export const SettingDialog: FC<Props> = ({ open, onClose }) => {
+export const SettingDialog: FC<Props> = ({ open, onClose,AI }) => {
   const { t } = useTranslation('settings');
-  const settings: Settings = getSettings();
+  const settings: Settings = getSettings(AI);
   const { state, dispatch } = useCreateReducer<Settings>({
     initialState: settings,
   });
@@ -45,7 +47,7 @@ export const SettingDialog: FC<Props> = ({ open, onClose }) => {
 
   const handleSave = () => {
     homeDispatch({ field: 'lightMode', value: state.theme });
-    saveSettings(state);
+    saveSettings(AI, state);
   };
 
   // Render nothing if the dialog is not open.

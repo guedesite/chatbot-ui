@@ -19,11 +19,14 @@ import SidebarActionButton from '@/components/Buttons/SidebarActionButton';
 import PromptbarContext from '../PromptBar.context';
 import { PromptModal } from './PromptModal';
 
+import {AI} from '@/types/AI';
+ 
 interface Props {
+  AI:AI;
   prompt: Prompt;
 }
 
-export const PromptComponent = ({ prompt }: Props) => {
+export const PromptComponent = ({ prompt, AI }: Props) => {
   const {
     dispatch: promptDispatch,
     handleUpdatePrompt,
@@ -35,8 +38,8 @@ export const PromptComponent = ({ prompt }: Props) => {
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState('');
 
-  const handleUpdate = (prompt: Prompt) => {
-    handleUpdatePrompt(prompt);
+  const handleUpdate = (AI:AI,prompt: Prompt) => {
+    handleUpdatePrompt(AI, prompt);
     promptDispatch({ field: 'searchTerm', value: '' });
   };
 
@@ -44,7 +47,7 @@ export const PromptComponent = ({ prompt }: Props) => {
     e.stopPropagation();
 
     if (isDeleting) {
-      handleDeletePrompt(prompt);
+      handleDeletePrompt(AI,prompt);
       promptDispatch({ field: 'searchTerm', value: '' });
     }
 
@@ -123,6 +126,7 @@ export const PromptComponent = ({ prompt }: Props) => {
           prompt={prompt}
           onClose={() => setShowModal(false)}
           onUpdatePrompt={handleUpdate}
+          AI={AI}
         />
       )}
     </div>

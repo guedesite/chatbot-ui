@@ -20,11 +20,15 @@ import HomeContext from '@/pages/api/home/home.context';
 
 import SidebarActionButton from '@/components/Buttons/SidebarActionButton';
 
+
+import { AI } from '@/types/AI';
+
 interface Props {
   currentFolder: FolderInterface;
   searchTerm: string;
-  handleDrop: (e: any, folder: FolderInterface) => void;
+  handleDrop: (AI:AI, e: any, folder: FolderInterface) => void;
   folderComponent: (ReactElement | undefined)[];
+  AI:AI;
 }
 
 const Folder = ({
@@ -32,6 +36,7 @@ const Folder = ({
   searchTerm,
   handleDrop,
   folderComponent,
+  AI,
 }: Props) => {
   const { handleDeleteFolder, handleUpdateFolder } = useContext(HomeContext);
 
@@ -48,16 +53,16 @@ const Folder = ({
   };
 
   const handleRename = () => {
-    handleUpdateFolder(currentFolder.id, renameValue);
+    handleUpdateFolder(AI,currentFolder.id, renameValue);
     setRenameValue('');
     setIsRenaming(false);
   };
 
-  const dropHandler = (e: any) => {
+  const dropHandler = (AI:AI, e: any) => {
     if (e.dataTransfer) {
       setIsOpen(true);
 
-      handleDrop(e, currentFolder);
+      handleDrop(AI, e, currentFolder);
 
       e.target.style.background = 'none';
     }
@@ -114,7 +119,7 @@ const Folder = ({
           <button
             className={`flex w-full cursor-pointer items-center gap-3 rounded-lg p-3 text-sm transition-colors duration-200 hover:bg-[#343541]/90`}
             onClick={() => setIsOpen(!isOpen)}
-            onDrop={(e) => dropHandler(e)}
+            onDrop={(e) => dropHandler(AI, e)}
             onDragOver={allowDrop}
             onDragEnter={highlightDrop}
             onDragLeave={removeHighlight}
@@ -138,7 +143,7 @@ const Folder = ({
                 e.stopPropagation();
 
                 if (isDeleting) {
-                  handleDeleteFolder(currentFolder.id);
+                  handleDeleteFolder(AI,currentFolder.id);
                 } else if (isRenaming) {
                   handleRename();
                 }

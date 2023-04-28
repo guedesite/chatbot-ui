@@ -3,10 +3,13 @@ import { FC } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
+import { AI } from '@/types/AI';
+
 interface Props {
   placeholder: string;
   searchTerm: string;
   onSearch: (searchTerm: string) => void;
+  AI:AI;
 }
 const Search: FC<Props> = ({ placeholder, searchTerm, onSearch }) => {
   const { t } = useTranslation('sidebar');

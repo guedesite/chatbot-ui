@@ -20,12 +20,14 @@ import HomeContext from '@/pages/api/home/home.context';
 
 import SidebarActionButton from '@/components/Buttons/SidebarActionButton';
 import ChatbarContext from '@/components/Chatbar/Chatbar.context';
+import { AI } from '@/types/AI';
 
 interface Props {
   conversation: Conversation;
+  AI:AI;
 }
 
-export const ConversationComponent = ({ conversation }: Props) => {
+export const ConversationComponent = ({ conversation, AI }: Props) => {
   const {
     state: { selectedConversation, messageIsStreaming },
     handleSelectConversation,
@@ -46,6 +48,7 @@ export const ConversationComponent = ({ conversation }: Props) => {
   };
 
   const handleDragStart = (
+    AI: AI,
     e: DragEvent<HTMLButtonElement>,
     conversation: Conversation,
   ) => {
@@ -56,7 +59,7 @@ export const ConversationComponent = ({ conversation }: Props) => {
 
   const handleRename = (conversation: Conversation) => {
     if (renameValue.trim().length > 0) {
-      handleUpdateConversation(conversation, {
+      handleUpdateConversation(AI, conversation, {
         key: 'name',
         value: renameValue,
       });
@@ -68,7 +71,7 @@ export const ConversationComponent = ({ conversation }: Props) => {
   const handleConfirm: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     if (isDeleting) {
-      handleDeleteConversation(conversation);
+      handleDeleteConversation(AI,conversation);
     } else if (isRenaming) {
       handleRename(conversation);
     }
@@ -123,10 +126,10 @@ export const ConversationComponent = ({ conversation }: Props) => {
               ? 'bg-[#343541]/90'
               : ''
           }`}
-          onClick={() => handleSelectConversation(conversation)}
+          onClick={() => handleSelectConversation(AI,conversation)}
           disabled={messageIsStreaming}
           draggable="true"
-          onDragStart={(e) => handleDragStart(e, conversation)}
+          onDragStart={(e) => handleDragStart(AI,e, conversation)}
         >
           <IconMessage size={18} />
           <div

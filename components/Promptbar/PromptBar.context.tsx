@@ -6,12 +6,14 @@ import { Prompt } from '@/types/prompt';
 
 import { PromptbarInitialState } from './Promptbar.state';
 
+import { AI } from '@/types/AI';
+
 export interface PromptbarContextProps {
   state: PromptbarInitialState;
   dispatch: Dispatch<ActionType<PromptbarInitialState>>;
-  handleCreatePrompt: () => void;
-  handleDeletePrompt: (prompt: Prompt) => void;
-  handleUpdatePrompt: (prompt: Prompt) => void;
+  handleCreatePrompt: (AI:AI) => void;
+  handleDeletePrompt: (AI:AI, prompt: Prompt) => void;
+  handleUpdatePrompt: (AI:AI, prompt: Prompt) => void;
 }
 
 const PromptbarContext = createContext<PromptbarContextProps>(undefined!);

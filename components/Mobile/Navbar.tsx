@@ -3,14 +3,19 @@ import { FC } from 'react';
 
 import { Conversation } from '@/types/chat';
 
+
+import { AI } from '@/types/AI';
+
 interface Props {
   selectedConversation: Conversation;
-  onNewConversation: () => void;
+  onNewConversation: (AI: AI) => void;
+  AI: AI;
 }
 
 export const Navbar: FC<Props> = ({
   selectedConversation,
   onNewConversation,
+  AI: AI
 }) => {
   return (
     <nav className="flex w-full justify-between bg-[#202123] py-3 px-4">
@@ -22,7 +27,7 @@ export const Navbar: FC<Props> = ({
 
       <IconPlus
         className="cursor-pointer hover:text-neutral-400 mr-8"
-        onClick={onNewConversation}
+        onClick={ () => onNewConversation(AI) }
       />
     </nav>
   );
